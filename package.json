@@ -1,0 +1,29 @@
+{
+  "name": "ecommerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "backend/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nguyenvanthuong0201/ShopOnline_ReactNodeJS.git"
+  },
+  "author": "ThuongNguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nguyenvanthuong0201/ShopOnline_ReactNodeJS/issues"
+  },
+  "homepage": "https://github.com/nguyenvanthuong0201/ShopOnline_ReactNodeJS#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}
