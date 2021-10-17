@@ -3,8 +3,11 @@ const ErrorHandler = require("../utils/errorHandler"); // customer lại báo l�
 const catchAsyncError = require("../middleware/catchAsyncError"); // Báo lỗi nhưng chương trình vẫn tiếp tục run
 const ApiFeatures = require("../utils/apiFeature");
 
-// create Product
+// create Product --Admin
 exports.createProduct = catchAsyncError(async (req, res, next) => {
+    //req.user.id nhận từ cookie sau khi đăng nhập
+    req.body.user = req.user.id
+
     const product = await Product.create(req.body); // Tạo ra 1 product mới 
     res.status(201).json({ success: true, product });
 });
