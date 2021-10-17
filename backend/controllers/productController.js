@@ -12,7 +12,7 @@ exports.createProduct = catchAsyncError(async (req, res, next) => {
 // get all product
 exports.getAllProduct = catchAsyncError(async (req, res) => {
     const resultPerPage = 5;
-    const productCount = await Product.countDocuments();
+    const productCount = await Product.countDocuments(); // đém bao nhiêu product
 
     const apiFeature = new ApiFeatures(Product.find(), req.query)
         .search() // search product
@@ -36,6 +36,7 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
     })
     res.status(200).json({ success: true, product })
 })
+
 // get  product details 
 exports.getProductDetails = catchAsyncError(async (req, res, next) => {
     let product = await Product.findById(req.params.id);

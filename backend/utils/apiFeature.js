@@ -1,7 +1,7 @@
 class ApiFeatures {
     constructor(query, queryString) {
         this.query = query,
-            this.queryString = queryString
+        this.queryString = queryString
     }
 
     search() {
@@ -15,6 +15,7 @@ class ApiFeatures {
         this.query = this.query.find({ ...keyword });
         return this;
     }
+
     filter() {
         const queryCopy = { ...this.queryString }
 
@@ -28,6 +29,7 @@ class ApiFeatures {
         this.query = this.query.find({ queryCopy })
         return this;
     }
+
     pagination(resultPerPage) {
         const currentPage = Number(this.queryString.page) || 1;
 
