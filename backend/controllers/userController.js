@@ -104,15 +104,113 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler("Reset password Token iss invalid or has been expired ", 400))
     }
 
-    if(req.body.password !== req.body.confirmPassword){
+    if (req.body.password !== req.body.confirmPassword) {
         return next(new ErrorHandler("Password is not password", 400))
     }
 
     user.password = req.body.password;
     user.resetPasswordToken = undefined,
-    user.resetPasswordExpire = undefined,
+        user.resetPasswordExpire = undefined,
 
-    await user.save();
-    sendToken(user,200,res)
-
+        await user.save();
+    sendToken(user, 200, res)
 })
+
+exports.getUserDetails = catchAsyncError(async (req, res, next) => {
+
+    const user = await User.findById(req.user.id)
+
+    if (!user) {
+        return next(new ErrorHandler("User not found", 404))
+    }
+    res.status(200).json({ success: true, user })
+})
+
+exports.updatePassword = catchAsyncError(async (req, res, next) => {
+
+    const user = await User.findById(req.user.id).select("+password");
+    const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
+
+    if (!isPasswordMatched) {
+        return next(new ErrorHandler("Old password is incorrect ", 400))
+    }
+    if (req.body.newPassword !== req.body.confirmPassword) {
+        return next(new ErrorHandler("Password does not match ", 400))
+    }
+    user.password = req.body.newPassword
+    await user.save()
+
+    sendToken(user, 200, res)
+})
+/// update user profile (User)
+exports.updateProfile = catchAsyncError(async (req, res, next) => {
+
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email,
+    }
+
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+        new: true,
+        runValidators:true,
+        useFindAndModify:false
+    })
+    res.status(200).json({
+        success:true
+    })
+})
+
+// get all users (Admin)
+exports.getAllUsers= catchAsyncError(async(req, res,next)=>{
+    const users = await User.find();
+    res.status(200).json({
+        success:true,
+        users,
+    })
+})
+
+// get single user (Admin)
+exports.getSingleUser= catchAsyncError(async(req, res,next)=>{
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        return next(new ErrorHandler("User not found", 404))
+    }
+    res.status(200).json({
+        success:true,
+        user,
+    })
+})
+
+/// update user profile (Admin)
+exports.updateUserRole = catchAsyncError(async (req, res, next) => {
+
+    const newUserData = {
+        name: req.body.name,
+        email: req.body.email,
+        role: req.body.role
+    }
+
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+        new: true,
+        runValidators:true,
+        useFindAndModify:false
+    })
+    res.status(200).json({
+        success:true,
+        message:"User update successfully"
+    })
+})
+/// update user profile (Admin)
+exports.DeleteUserProfile = catchAsyncError(async (req, res, next) => {
+    // we will remove cloud later
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        return next(new ErrorHandler("User not found", 404))
+    }
+    await user.remove();
+    res.status(200).json({
+        success:true,
+        message:"User delete successfully"
+    })
+})
+
