@@ -23,7 +23,7 @@ exports.getAllProduct = catchAsyncError(async (req, res) => {
         .pagination(resultPerPage) // phân trang product
     // const products = await Product.find(); // tìm tất cả các product
     const products = await apiFeature.query;
-    res.status(200).json({ message: true, products ,productCount});
+    res.status(200).json({ message: true, products, productCount });
 });
 
 // update product --only Admin
@@ -58,3 +58,88 @@ exports.deleteProduct = catchAsyncError(async (req, res, next) => {
     await product.remove();
     res.status(200).json({ success: true, message: "product delete successfully" });
 })
+
+// create new review or update the review
+exports.createProductReview = catchAsyncError(async (req, res, next) => {
+    const { rating, comment, productId } = req.body;
+    const review = {
+        user: req.user._id,
+        name: req.user.name,
+        rating: Number(rating), // Ép kiểu về number
+        comment,
+    }
+    const product = await Product.findById(productId);
+
+    const isReviewed = product.reviews.find(rev => rev.user.toString() === req.user._id.toString())
+    // nếu đã review thì sẽ ko review thêm nữa
+    if (isReviewed) {
+        product.reviews.forEach(rev => {
+            if (rev.user.toString() === req.user._id.toString())
+            (rev.rating = rating), (rev.comment = comment)
+        });
+    } else {
+        product.reviews.push(review);
+        product.numOfReviews = product.reviews.length;
+    }
+
+    // add ratings --- tổng số ratings chia cho số lần review = 
+    let avg = 0;
+    product.reviews.forEach(rev => {
+        avg += rev.rating;
+    })
+    product.ratings = avg / product.reviews.length;
+
+    await product.save({ validateBeforeSave: false });
+    res.status(200).json({
+        success: true
+    })
+})
+
+// get all review of 1 product 
+exports.getProductReview = catchAsyncError(async (req, res, next) => {
+    const product = await Product.findById(req.query.id);
+ 
+    if (!product) {
+        return next(new ErrorHandler("Product not found", 404))
+    }
+    res.status(200).json({
+        success:true,
+        reviews:product.reviews,
+    });
+})
+
+// delete review  --- không xóa hẳng mà chỉ update trong 1 array
+exports.DeleteProductReview = catchAsyncError(async (req, res, next) => {
+    const product = await Product.findById(req.query.productId);
+ 
+    if (!product) {
+        return next(new ErrorHandler("Product not found", 404))
+    }
+    // filter lấy những object nào không trùng với _id(review)
+    const reviews = product.reviews.filter(rev=>rev._id.toString() !== req.query.id.toString())
+    
+    let avg = 0;
+    
+    reviews.forEach(rev => {
+        avg += rev.rating;
+    })
+    const ratings = avg / reviews.length;
+
+    const numOfReviews = reviews.length;
+
+    await Product.findByIdAndUpdate(req.query.productId,{
+        reviews,
+        ratings,
+        numOfReviews,
+    },{
+        new:true,
+        runValidators:true,
+        useFindAndModify:false,
+    });
+    
+    res.status(200).json({
+        success:true,
+    });
+})
+
+
