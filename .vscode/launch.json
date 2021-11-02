@@ -5,6 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug-postman",
+            "processId": "${command:PickProcess}",
+            "request": "attach",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
+        },
+
+
+        {
             "command": "npm run dev",
             "name": "Run npm start",
             "request": "launch",
@@ -19,6 +30,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\backend\\server.js"
-        }
+        },
+   
     ]
 }
