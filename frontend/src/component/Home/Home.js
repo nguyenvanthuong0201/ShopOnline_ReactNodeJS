@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { CgMouse } from "react-icons/all";
 import "./Home.css";
-import Product from "./Product";
+import Product from "./ProductCard";
 import MetaData from "../layout/MetaData";
 import { clearErrors, getProduct } from "../../actions/productAction";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,7 +11,7 @@ import { useAlert } from "react-alert";
 function Home() {
   const alert = useAlert();
   const dispatch = useDispatch();
-  const { loading, error, products, productCount } = useSelector(
+  const { loading, error, products } = useSelector(
     (state) => state.products
   );
 
@@ -44,7 +44,7 @@ function Home() {
           <div className="container" id="container">
             {products &&
               products.map((product) => (
-                <Product key={product.id} product={product} />
+                <Product key={product._id} product={product} />
               ))}
           </div>
         </Fragment>
@@ -54,4 +54,3 @@ function Home() {
 }
 
 export default Home;
-6h36,38
