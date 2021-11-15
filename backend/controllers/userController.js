@@ -10,20 +10,24 @@ const cloudinary = require('cloudinary');
 // create user 
 exports.registerUser = catchAsyncError(async (req, res, next) => {
     const { name, email, password } = req.body;
+
     const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-        folder: "ECommerce",
+        folder: "avatars",
         width: 150,
-        crop: "scale"
-    })
+        crop: "scale",
+    });
+
     const user = await User.create({
-        name, email, password,
+        name,
+        email,
+        password,
         avatar: {
             public_id: myCloud.public_id,
-            url: myCloud.secure_url
-        }
+            url: myCloud.secure_url,
+        },
     });
-    // goi getJWTToken từ userModel
-    sendToken(user, 201, res)
+
+    sendToken(user, 201, res);
 })
 // login user
 exports.loginUser = catchAsyncError(async (req, res, next) => {

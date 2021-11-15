@@ -43,13 +43,13 @@ const LoginSignUp = ({ history, location }) => {
 
   const registerSubmit = (e) => {
     e.preventDefault();
-    const data = {
-      "name":name,
-      "email": email,
-      "password": password,
-      "avatar": avatar
-    }
-    dispatch(register(data));
+    const myForm = new FormData();
+
+    myForm.set("name", name);
+    myForm.set("email", email);
+    myForm.set("password", password);
+    myForm.set("avatar", avatar);
+    dispatch(register(myForm));
   };
 
   const registerDataChange = (e) => {

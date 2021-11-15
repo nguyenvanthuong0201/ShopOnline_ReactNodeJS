@@ -30,12 +30,19 @@ exports.createNewOrder = catchAsyncError(async (req, res, next) => {
 
 // get single order
 exports.getSingleOrder = catchAsyncError(async (req, res, next) => {
-  const order = await Order.findById(req.params.id).populate("user", "name email"); // join thêm 2 thuộc tính của user
+  const order = await Order.findById(req.params.id).populate(
+    "user",
+    "name email"
+  );
+
   if (!order) {
-    return next(new ErrorHandler("Order not found", 404))
+    return next(new ErrorHandler("Order not found with this Id", 404));
   }
 
-  res.status(200).json({ success: true, order })
+  res.status(200).json({
+    success: true,
+    order,
+  });
 })
 
 // get logged in user orders
@@ -59,18 +66,30 @@ exports.getAllOrder = catchAsyncError(async (req, res, next) => {
 // update order status --admin
 exports.updateOrder = catchAsyncError(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
-  if (order.orderStatus === "Delivered") {
-    return next(new ErrorHandler("You have already delivered this product", 400));
+
+  if (!order) {
+    return next(new ErrorHandler("Order not found with this Id", 404));
   }
-  order.orderItems.forEach(async order => {
-    await updateStock(order.product, order.quantity)
-  });
+
+  if (order.orderStatus === "Delivered") {
+    return next(new ErrorHandler("You have already delivered this order", 400));
+  }
+
+  if (req.body.status === "Shipped") {
+    order.orderItems.forEach(async (o) => {
+      await updateStock(o.product, o.quantity);
+    });
+  }
   order.orderStatus = req.body.status;
+
   if (req.body.status === "Delivered") {
     order.deliveredAt = Date.now();
   }
-  await order.save({ validateBeforeSave: false })
-  res.status(200).json({ success: true })
+
+  await order.save({ validateBeforeSave: false });
+  res.status(200).json({
+    success: true,
+  });
 })
 
 const updateStock = async (id,quantity) => {

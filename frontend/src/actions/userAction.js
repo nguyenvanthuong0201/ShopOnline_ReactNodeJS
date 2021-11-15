@@ -60,19 +60,19 @@ import {
   // Register
   export const register = (userData) => async (dispatch) => {
     try {
-      dispatch({ type: REGISTER_USER_REQUEST });
-  
-      const config = { headers: { "Content-Type": "multipart/form-data" } };
-  
-      const { data } = await axios.post(`/api/v1/register`, userData, config);
-  
-      dispatch({ type: REGISTER_USER_SUCCESS, payload: data.user });
-    } catch (error) {
-      dispatch({
-        type: REGISTER_USER_FAIL,
-        payload: error.response.data.message,
-      });
-    }
+        dispatch({ type: REGISTER_USER_REQUEST });
+    
+        const config = { headers: { "Content-Type": "multipart/form-data" } };
+    
+        const { data } = await axios.post(`/api/v1/register`, userData, config);
+    
+        dispatch({ type: REGISTER_USER_SUCCESS, payload: data.user });
+      } catch (error) {
+        dispatch({
+          type: REGISTER_USER_FAIL,
+          payload: error.response.data.message,
+        });
+      }
   };
   
   // Load User
@@ -227,6 +227,7 @@ import {
   
   // Delete User
   export const deleteUser = (id) => async (dispatch) => {
+      console.log(`id`, id)
     try {
       dispatch({ type: DELETE_USER_REQUEST });
   
