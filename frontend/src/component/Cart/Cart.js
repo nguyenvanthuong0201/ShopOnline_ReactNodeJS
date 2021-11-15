@@ -77,8 +77,7 @@ const Cart = ({ history }) => {
                                             +
                                         </button>
                                     </div>
-                                    <p className="cartSubtotal">{`${item.price * item.quantity
-                                        } VNĐ`}</p>
+                                    <p className="cartSubtotal">{`${(item.price * item.quantity).toLocaleString()} VNĐ`}</p>
                                 </div>
                             ))}
 
@@ -88,9 +87,7 @@ const Cart = ({ history }) => {
                                 <p>Gross Total</p>
                                 {/* Tính tổng đơn hàng */}
                                 <p>{`${cartItems.reduce(
-                                    (acc, item) => acc + item.quantity * item.price,
-                                    0
-                                )} VNĐ`}</p>
+                                    (acc, item) => acc + item.quantity * item.price, 0).toLocaleString()} VNĐ`}</p>
                             </div>
                             <div></div>
                             <div className="checkOutBtn">

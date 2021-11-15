@@ -74,8 +74,8 @@ const ConfirmOrder = ({ history }) => {
                                             {item.name}
                                         </Link>
                                         <span>
-                                            {item.quantity} X {item.price} VNĐ =
-                                            <b>{item.price * item.quantity} VNĐ</b>
+                                            {item.quantity} X {item.price.toLocaleString()} VNĐ =
+                                            <b>{(item.price * item.quantity).toLocaleString()} VNĐ</b>
                                         </span>
                                     </div>
                                 ))}
@@ -89,15 +89,15 @@ const ConfirmOrder = ({ history }) => {
                         <div>
                             <div>
                                 <p>Subtotal:</p>
-                                <span>{subtotal} VNĐ</span>
+                                <span>{subtotal.toLocaleString()} VNĐ</span>
                             </div>
                             <div>
                                 <p>Shipping Charges:</p>
-                                <span>{shippingCharges} VNĐ</span>
+                                <span>{shippingCharges.toLocaleString()} VNĐ</span>
                             </div>
                             <div>
                                 <p>GST:</p>
-                                <span>{tax} VNĐ</span>
+                                <span>{tax.toLocaleString()} VNĐ</span>
                             </div>
                         </div>
 
@@ -105,7 +105,7 @@ const ConfirmOrder = ({ history }) => {
                             <p>
                                 <b>Total:</b>
                             </p>
-                            <span>{totalPrice} VNĐ</span>
+                            <span>{totalPrice.toLocaleString()} VNĐ</span>
                         </div>
 
                         <button onClick={proceedToPayment}>Proceed To Payment</button>

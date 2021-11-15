@@ -136,7 +136,7 @@ const Payment = ({ history }) => {
 
           <input
             type="submit"
-            value={`Pay - ${orderInfo && orderInfo.totalPrice} VNĐ`}
+            value={`Pay - ${orderInfo && orderInfo.totalPrice.toLocaleString()} VNĐ`}
             ref={payBtn}
             className="paymentFormBtn"
           />

@@ -15,7 +15,7 @@ exports.createProduct = catchAsyncError(async (req, res, next) => {
 // get all product
 exports.getAllProduct = catchAsyncError(async (req, res) => {
     const resultPerPage = 8;
-    const productCount = await Product.countDocuments(); // đém bao nhiêu product
+    const productsCount = await Product.countDocuments(); // đém bao nhiêu product
 
     const apiFeature = new ApiFeatures(Product.find(), req.query)
         .search() // search product
@@ -31,7 +31,7 @@ exports.getAllProduct = catchAsyncError(async (req, res) => {
   
     products = await apiFeature.query.clone();
 
-    res.status(200).json({ message: true, products, productCount, resultPerPage, filteredProductsCount });
+    res.status(200).json({ message: true, products, productsCount, resultPerPage, filteredProductsCount });
 });
 
 // update product --only Admin

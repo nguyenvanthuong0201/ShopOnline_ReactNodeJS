@@ -46,7 +46,6 @@ const Products = ({ match }) => {
         setPrice(newPrice)
     }
     let count = filteredProductsCount
-
     return (
         <Fragment>
             {loading ? <Loader /> : (
@@ -67,11 +66,18 @@ const Products = ({ match }) => {
                                 valueLabelDisplay="auto"
                                 getAriaLabel={() => 'range-slider'}
                                 min={0}
-                                max={25000}
+                                max={250000}
+                                step={10000}
                             />
 
                             <Typography>Categories</Typography>
                             <ul className="categoryBox">
+                                <li
+                                    className="category-link"
+                                    onClick={() => setCategory(null)}
+                                >
+                                    All
+                                </li>
                                 {categories.map((category) => (
                                     <li
                                         className="category-link"
