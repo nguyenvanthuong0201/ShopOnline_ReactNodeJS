@@ -73,9 +73,11 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
     const resetTokenUser = user.getResetPasswordToken();
 
     await user.save({ validateBeforeSave: false })
-
-    // const resetPasswordUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetTokenUser}`
-    const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetTokenUser}`
+    // trên heroku
+    const resetPasswordUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetTokenUser}`
+    
+    /// thao tác trên localhost
+    // const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetTokenUser}`
 
     const message = `Your password reset token is : - \n\n ${resetPasswordUrl} \n\n if you have not requested this email then please ignore it`
 
